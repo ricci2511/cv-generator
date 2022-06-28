@@ -7,6 +7,8 @@ exported to a PDF file.
 My first ever React project and first time using Material UI. Built with class components
 to get familiar with them. Will probably soon rewrite the app to use React Hooks.
 
+[Live Demo](https://ricci2511.github.io/cv-generator/) :star2:
+
 ## Getting Started
 ```
 git clone https://github.com/ricci2511/cv-generator.git
