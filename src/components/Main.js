@@ -192,7 +192,7 @@ class Main extends Component {
         const { firstName, lastName } = this.state.generalInformation;
 
         return(
-            <Grid container spacing={2}>
+            <Grid container columnSpacing={4} rowSpacing={1}>
                 <Grid item sm={12} lg={6} component="section">
                     <CVForm 
                         generalInformation={this.state.generalInformation} 
@@ -211,7 +211,7 @@ class Main extends Component {
                         deleteSkill={this.handleDeleteSkill}
                     />
                 </Grid>
-                <Grid item sm={12} lg={6} component="section">
+                <Grid item sm={12} lg={6} component="section" sx={{ width: '100%' }}>
                     <CVPreview
                         generalInformation={this.state.generalInformation}
                         education={this.state.education}

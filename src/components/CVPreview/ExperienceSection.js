@@ -15,14 +15,14 @@ class ExperienceSection extends Component {
 
         return(
             <Box
-                sx={{ display: 'flex', gap: 10, pt: 2 }}
+                sx={{ display: 'grid', gap: 6, pt: 2, gridTemplateColumns: '1fr 2fr' }}
             >
                 <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: '800' }}>
                          {formatDate(fromDate)} - {isCurrent ? 'Current' : formatDate(toDate)}
                     </Typography>
                 </Box>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box>
                     <Typography variant="h6" sx={{ fontWeight: '800' }}>
                         {position}
                     </Typography>
