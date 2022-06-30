@@ -1,28 +1,27 @@
-import { List, ListItem, Typography } from "@mui/material";
-import { Component } from "react";
+import { List, ListItem, Typography } from '@mui/material';
+import React from 'react';
 
-class SkillsSection extends Component {
-    render() {
-        const { skills } = this.props;
-        const skillItems = skills.map((skill) => (
-                <ListItem key={skill.id} disablePadding sx={{ display: 'list-item' }}>
-                    <Typography variant='body1'>{skill.skill}</Typography>
-                </ListItem>
-        ));
+const SkillsSection = ({ skills }) => {
+    const skillItems = skills.map((skill) => (
+        <ListItem key={skill.id} disablePadding sx={{ display: 'list-item' }}>
+            <Typography variant="body1">{skill.skill}</Typography>
+        </ListItem>
+    ));
 
-        return(
-            <List sx={{ 
-                listStyleType: 'disc', 
+    return (
+        <List
+            sx={{
+                listStyleType: 'disc',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1, 
+                gap: 1,
                 pt: 2,
-                pl: 4
-            }}>
-                {skillItems}
-            </List>
-        );
-    }
-}
+                pl: 4,
+            }}
+        >
+            {skillItems}
+        </List>
+    );
+};
 
 export default SkillsSection;
