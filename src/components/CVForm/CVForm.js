@@ -3,7 +3,6 @@ import Education from './Education';
 import Experience from './Experience';
 import GeneralInformation from './GeneralInformation';
 import Skills from './Skills';
-
 import React from 'react';
 
 const CVForm = ({

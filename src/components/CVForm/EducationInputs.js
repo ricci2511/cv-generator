@@ -8,7 +8,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
 import React from 'react';
 
 const EducationInputs = ({ education, deleteEducation, changeEducation }) => {

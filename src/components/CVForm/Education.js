@@ -3,7 +3,6 @@ import CVSection from './CVSection';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { getFormEducations } from '../Utils/getSections';
-
 import React from 'react';
 
 const Education = ({
