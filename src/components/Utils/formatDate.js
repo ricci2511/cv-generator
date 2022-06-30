@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
 const formatDate = (value) => {
     return format(new Date(value), 'yyyy-MM');

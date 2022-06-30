@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 const CV = {
-    generalInformation : {
+    generalInformation: {
         firstName: '',
         lastName: '',
         title: '',
@@ -10,7 +10,7 @@ const CV = {
         description: '',
         image: '',
     },
-    education : [
+    education: [
         {
             id: uuidv4(),
             qualification: '',
@@ -18,9 +18,9 @@ const CV = {
             fromDate: null,
             toDate: null,
             isCurrent: false,
-        }
+        },
     ],
-    experience : [
+    experience: [
         {
             id: uuidv4(),
             company: '',
@@ -29,7 +29,7 @@ const CV = {
             fromDate: null,
             toDate: null,
             isCurrent: false,
-        }
+        },
     ],
     skills: [],
 };
