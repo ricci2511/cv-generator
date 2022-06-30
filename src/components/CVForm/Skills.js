@@ -1,79 +1,72 @@
-import { Button, IconButton, List, ListItem, ListItemButton, ListItemText, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import { Component } from "react";
-import CVSection from "./CVSection";
+import {
+    Button,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    TextField,
+} from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import CVSection from './CVSection';
 
-class Skills extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { skillText: '' };
-    }
+const Skills = ({ skills, addSkill, deleteSkill }) => {
+    const [skillValue, setSkillValue] = useState('');
 
-    handleChangeSkillText = (e) => {
-        this.setState({ skillText: e.target.value });
-    };
+    const handleSkillValueChange = (e) => setSkillValue(e.target.value);
+    const resetSkillValue = () => setSkillValue('');
 
-    resetSkillText = () => {
-        this.setState({ skillText: '' });
-    }
-    
-    render() {
-        const {
-            skills,
-            addSkill,
-            deleteSkill,
-        } = this.props;
+    const skillItems = skills.map((skill) => (
+        <ListItem key={skill.id} disablePadding>
+            <ListItemButton>
+                <ListItemText primary={skill.skill} />
+                <IconButton
+                    aria-label="delete"
+                    onClick={() => deleteSkill(skill.id)}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </ListItemButton>
+        </ListItem>
+    ));
 
-        const skillItems = skills.map((skill) => (
-            <ListItem key={skill.id} disablePadding>
-                <ListItemButton>
-                    <ListItemText primary={skill.skill} />
-                    <IconButton aria-label="delete" onClick={() => deleteSkill(skill.id)}>
-                        <DeleteIcon />
-                    </IconButton>
-                </ListItemButton>
-            </ListItem>
-        ));
-
-        return(
-            <CVSection title="Skills">
-                <TextField
+    return (
+        <CVSection title="Skills">
+            <TextField
+                fullWidth
+                id="skills"
+                name="skill"
+                label="Skill"
+                variant="standard"
+                value={skillValue}
+                onChange={(e) => handleSkillValueChange(e)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        addSkill(skillValue);
+                        resetSkillValue();
+                    }
+                }}
+                sx={{ mb: 2 }}
+            />
+            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                <List>{skillItems}</List>
+                <Button
+                    variant="contained"
                     fullWidth
-                    id="skills"
-                    name="skill"
-                    label="Skill"
-                    variant="standard"
-                    value={this.state.skillText}
-                    onChange={(e) => this.handleChangeSkillText(e)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            addSkill(this.state.skillText);
-                            this.resetSkillText();
-                        }
+                    startIcon={<AddIcon />}
+                    onClick={() => {
+                        addSkill(skillValue);
+                        resetSkillValue();
                     }}
-                    sx={{ mb: 2 }}
-                />
-                <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                    <List>
-                        {skillItems}
-                    </List>
-                    <Button
-                        variant="contained" 
-                        fullWidth 
-                        startIcon={<AddIcon />}
-                        onClick={() => {
-                            addSkill(this.state.skillText);
-                            this.resetSkillText();
-                        }}
-                    >
-                        Add
-                    </Button>
-                </Box>
-            </CVSection>
-        );
-    }
-}
+                >
+                    Add
+                </Button>
+            </Box>
+        </CVSection>
+    );
+};
 
 export default Skills;
