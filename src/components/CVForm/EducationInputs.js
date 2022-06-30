@@ -11,12 +11,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import React from 'react';
 
-const EducationInputs = ({
-    education,
-    deleteEducation,
-    changeEducation,
-    changeDate,
-}) => {
+const EducationInputs = ({ education, deleteEducation, changeEducation }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Grid container spacing={3}>
@@ -50,7 +45,9 @@ const EducationInputs = ({
                         name="fromDate"
                         inputFormat="dd/MM/yyyy"
                         value={education.fromDate}
-                        onChange={(e) => changeDate(e, education, 'fromDate')}
+                        onChange={(e) =>
+                            changeEducation(e, education.id, 'fromDate')
+                        }
                         renderInput={(params) => (
                             <TextField
                                 fullWidth
@@ -69,7 +66,9 @@ const EducationInputs = ({
                         name="toDate"
                         inputFormat="dd/MM/yyyy"
                         value={education.toDate}
-                        onChange={(e) => changeDate(e, education, 'toDate')}
+                        onChange={(e) =>
+                            changeEducation(e, education.id, 'toDate')
+                        }
                         renderInput={(params) => (
                             <TextField
                                 fullWidth

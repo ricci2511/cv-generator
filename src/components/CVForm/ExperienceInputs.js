@@ -8,12 +8,12 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { isAfter, isBefore } from 'date-fns';
 
 const ExperienceInputs = ({
     experience,
     deleteExperience,
     changeExperience,
-    changeDate,
 }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -61,7 +61,9 @@ const ExperienceInputs = ({
                         name="fromDate"
                         inputFormat="dd/MM/yyyy"
                         value={experience.fromDate}
-                        onChange={(e) => changeDate(e, experience, 'fromDate')}
+                        onChange={(e) =>
+                            changeExperience(e, experience.id, 'fromDate')
+                        }
                         renderInput={(params) => (
                             <TextField
                                 fullWidth
@@ -80,7 +82,9 @@ const ExperienceInputs = ({
                         name="toDate"
                         inputFormat="dd/MM/yyyy"
                         value={experience.toDate}
-                        onChange={(e) => changeDate(e, experience, 'toDate')}
+                        onChange={(e) =>
+                            changeExperience(e, experience.id, 'toDate')
+                        }
                         renderInput={(params) => (
                             <TextField
                                 fullWidth
