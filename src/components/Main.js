@@ -1,70 +1,69 @@
-import { Component } from "react";
+import { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import CVForm from "./CVForm/CVForm";
-import CVPreview from "./CVPreview/CVPreview";
-import { Button, Grid } from "@mui/material";
-import CV from "./Utils/CV";
-import ReactToPrint from "react-to-print";
-import CVExample from "./Utils/CVExample";
+import CVForm from './CVForm/CVForm';
+import CVPreview from './CVPreview/CVPreview';
+import { Button, Grid } from '@mui/material';
+import { useReactToPrint } from 'react-to-print';
+import CVExample from './Utils/CVExample';
+import React from 'react';
+import { isDate } from 'date-fns';
 
-class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            generalInformation: {
-                firstName: '',
-                lastName: '',
-                title: '',
-                phoneNumber: '',
-                email: '',
-                description: '',
-                image: '',
-            },
-            education: [
-                {
-                    id: uuidv4(),
-                    qualification: '',
-                    organization: '',
-                    fromDate: null,
-                    toDate: null,
-                    isCurrent: false,
-                },
-            ],
-            experience: [
-                {
-                    id: uuidv4(),
-                    company: '',
-                    position: '',
-                    activities: '',
-                    fromDate: null,
-                    toDate: null,
-                    isCurrent: false,
-                },
-            ],
-            skills: [],
-        };
-    }
+const Main = () => {
+    const [generalInformation, setGeneralInformation] = useState({
+        firstName: '',
+        lastName: '',
+        title: '',
+        phoneNumber: '',
+        email: '',
+        description: '',
+        image: '',
+    });
 
-    findAndDeleteSectionById = (sections, id) => {
+    const [educations, setEducations] = useState([
+        {
+            qualification: '',
+            id: uuidv4(),
+            organization: '',
+            fromDate: null,
+            toDate: null,
+            isCurrent: false,
+        },
+    ]);
+
+    const [experiences, setExperiences] = useState([
+        {
+            id: uuidv4(),
+            company: '',
+            position: '',
+            activities: '',
+            fromDate: null,
+            toDate: null,
+            isCurrent: false,
+        },
+    ]);
+
+    const [skills, setSkills] = useState([]);
+
+    const findAndDeleteSectionById = (sections, id) => {
         const sectionToDelete = sections.find((section) => section.id === id);
         return sections.filter((section) => section !== sectionToDelete);
     };
 
-    handleChangeGeneralInformation = (e) => {
-        const { name, value } = e.target;
-        this.setState((prevState) => {
-            const generalInfo = {...prevState.generalInformation};
-            
-            (name === 'image')
-                ? generalInfo[name] = URL.createObjectURL(e.target.files[0])
-                : generalInfo[name] = value;
+    const handleGeneralInformationChange = (e) => {
+        const { name, value, type } = e.target;
+        setGeneralInformation((prevState) => {
+            const generalInfo = { ...prevState };
 
-            return { generalInformation: generalInfo }
+            type === 'file'
+                ? (generalInfo[name] = URL.createObjectURL(e.target.files[0]))
+                : (generalInfo[name] = value);
+
+            return generalInfo;
         });
     };
 
-    handleAddEducation = () => {
-        this.setState((prevState) => {
+    const handleAddEducation = () => {
+        setEducations((prevState) => {
             const educationSection = {
                 id: uuidv4(),
                 qualification: '',
@@ -72,38 +71,40 @@ class Main extends Component {
                 fromDate: null,
                 toDate: null,
                 isCurrent: false,
-            }
+            };
 
-            return {
-                education: [...prevState.education, educationSection]
-            }
+            return [...prevState, educationSection];
         });
     };
 
-    handleDeleteEducation = (id) => {
-        this.setState((prevState) => {
-            return {
-                education: this.findAndDeleteSectionById([...prevState.education], id)
+    const handleDeleteEducation = (id) => {
+        setEducations((prevState) => {
+            return findAndDeleteSectionById([...prevState], id);
+        });
+    };
+
+    const handleEducationChange = (e, id, elName) => {
+        setEducations((prevState) => {
+            const educationSections = [...prevState];
+            const sectionToChange = educationSections.find(
+                (section) => section.id === id
+            );
+
+            if (isDate(e)) {
+                sectionToChange[elName] = e;
+            } else {
+                const { name, value, type, checked } = e.target;
+                type === 'checkbox'
+                    ? (sectionToChange[name] = checked)
+                    : (sectionToChange[name] = value);
             }
+
+            return educationSections;
         });
     };
 
-    handleChangeEducation = (e, id) => {
-        const { name, value, checked } = e.target;
-        this.setState((prevState) => {
-            const educationSections = [...prevState.education];
-            const sectionToChange = educationSections.find((section) => section.id === id);
-
-            (name === 'isCurrent')
-                ? sectionToChange[name] = checked
-                : sectionToChange[name] = value;
-
-            return { education: educationSections }
-        });
-    };
-
-    handleAddExperience = () => {
-        this.setState((prevState) => {
+    const handleAddExperience = () => {
+        setExperiences((prevState) => {
             const experienceSection = {
                 id: uuidv4(),
                 company: '',
@@ -113,155 +114,150 @@ class Main extends Component {
                 activities: '',
             };
 
-            return { experience: [...prevState.experience, experienceSection] }
+            return [...prevState, experienceSection];
         });
     };
 
-    handleDeleteExperience = (id) => {
-        this.setState((prevState) => {
-            return {
-                experience: this.findAndDeleteSectionById([...prevState.experience], id)
+    const handleDeleteExperience = (id) => {
+        setExperiences((prevState) => {
+            return findAndDeleteSectionById([...prevState], id);
+        });
+    };
+
+    const handleExperienceChange = (e, id, elName) => {
+        setExperiences((prevState) => {
+            const experienceSections = [...prevState];
+            const sectionToChange = experienceSections.find(
+                (section) => section.id === id
+            );
+
+            if (isDate(e)) {
+                sectionToChange[elName] = e;
+            } else {
+                const { name, value, type, checked } = e.target;
+                type === 'checkbox'
+                    ? (sectionToChange[name] = checked)
+                    : (sectionToChange[name] = value);
             }
+
+            return experienceSections;
         });
     };
 
-    handleChangeExperience = (e, id) => {
-        const { name, value, checked } = e.target;
-        this.setState((prevState) => {
-            const experienceSections = [...prevState.experience];
-            const sectionToChange = experienceSections.find((section) => section.id === id); 
-
-            (name === 'isCurrent')
-                ? sectionToChange[name] = checked
-                : sectionToChange[name] = value;
-
-            return { experience: experienceSections }
-        });
-    };
-
-    handleChangeDate = (e, sectionObj, name) => {
-        this.setState((prevState) => {
-            const educationSections = prevState.education;
-            const education = educationSections.find((section) => section === sectionObj);
-
-            if (education) {
-                education[name] = e;
-                return {
-                    education: educationSections
-                }
-            } 
-
-            const experienceSections = prevState.experience;
-            const experience = experienceSections.find((section) => section === sectionObj);
-            experience[name] = e;
-            return {
-                experience: experienceSections
-            }
-        });
-    };
-
-    handleAddSkill = (skillValue) => {
-        this.setState((prevState) => {
-            if (skillValue === '') return;
+    const handleAddSkill = (skillValue) => {
+        if (skillValue === '') return;
+        setSkills((prevState) => {
             const skillItem = {
                 id: uuidv4(),
                 skill: skillValue,
             };
 
-            return { skills: [...prevState.skills, skillItem] }
+            return [...prevState, skillItem];
         });
     };
 
-    handleDeleteSkill = (id) => {
-        this.setState((prevState) => {
-            return {
-                skills: this.findAndDeleteSectionById([...prevState.skills], id)
-            }
+    const handleDeleteSkill = (id) => {
+        setSkills((prevState) => {
+            return findAndDeleteSectionById([...prevState], id);
         });
     };
 
-    handleReset = () => {
-        this.setState(CV);
+    const handleLoadExample = () => {
+        setGeneralInformation(CVExample.generalInformation);
+        setEducations(CVExample.education);
+        setExperiences(CVExample.experience);
+        setSkills(CVExample.skills);
     };
 
-    handleLoadExample = () => {
-        this.setState(CVExample);
+    const handleReset = () => {
+        setGeneralInformation({
+            firstName: '',
+            lastName: '',
+            title: '',
+            phoneNumber: '',
+            email: '',
+            description: '',
+            image: '',
+        });
+        setEducations([]);
+        setExperiences([]);
+        setSkills([]);
     };
 
-    render() {
-        const { firstName, lastName } = this.state.generalInformation;
+    const previewRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => previewRef.current,
+        documentTitle: `${generalInformation.firstName}_${generalInformation.lastName}_CV`,
+    });
 
-        return(
-            <Grid container columnSpacing={4} rowSpacing={1}>
-                <Grid item sm={12} lg={6} component="section">
-                    <CVForm 
-                        generalInformation={this.state.generalInformation} 
-                        changeGeneralInformation={this.handleChangeGeneralInformation} 
-                        education={this.state.education}
-                        addEducation={this.handleAddEducation}
-                        deleteEducation={this.handleDeleteEducation}
-                        changeEducation={this.handleChangeEducation}
-                        experience={this.state.experience}
-                        addExperience={this.handleAddExperience}
-                        deleteExperience={this.handleDeleteExperience}
-                        changeExperience={this.handleChangeExperience}
-                        changeDate={this.handleChangeDate}
-                        skills={this.state.skills}
-                        addSkill={this.handleAddSkill}
-                        deleteSkill={this.handleDeleteSkill}
-                    />
-                </Grid>
-                <Grid item sm={12} lg={6} component="section" sx={{ width: '100%' }}>
-                    <CVPreview
-                        generalInformation={this.state.generalInformation}
-                        education={this.state.education}
-                        experience={this.state.experience}
-                        skills={this.state.skills}
-                        ref={e => (this.printRef = e)}
-                        className="cv-preview" 
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <ReactToPrint 
-                        copyStyles
-                        trigger={() => {
-                            return(
-                                <Button 
-                                    variant="contained"
-                                    fullWidth 
-                                    color="success"
-                                >
-                                    Download PDF
-                                </Button>
-                            );
-                        }}
-                        content={() => this.printRef}
-                        documentTitle={`${firstName}_${lastName}_CV`}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button 
-                        variant="contained"
-                        fullWidth 
-                        onClick={this.handleLoadExample}
-                        color="info"
-                    >
-                        Load Example
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <Button 
-                        variant="contained"
-                        fullWidth 
-                        onClick={this.handleReset}
-                        color="error"
-                    >
-                        Reset
-                    </Button>
-                </Grid>
-           </Grid>
-        );
-    }
-}
+    return (
+        <Grid container columnSpacing={4} rowSpacing={1}>
+            <Grid item sm={12} lg={6} component="section">
+                <CVForm
+                    generalInformation={generalInformation}
+                    changeGeneralInformation={handleGeneralInformationChange}
+                    education={educations}
+                    addEducation={handleAddEducation}
+                    deleteEducation={handleDeleteEducation}
+                    changeEducation={handleEducationChange}
+                    experience={experiences}
+                    addExperience={handleAddExperience}
+                    deleteExperience={handleDeleteExperience}
+                    changeExperience={handleExperienceChange}
+                    changeDate={null}
+                    skills={skills}
+                    addSkill={handleAddSkill}
+                    deleteSkill={handleDeleteSkill}
+                />
+            </Grid>
+            <Grid
+                item
+                sm={12}
+                lg={6}
+                component="section"
+                sx={{ width: '100%' }}
+            >
+                <CVPreview
+                    generalInformation={generalInformation}
+                    education={educations}
+                    experience={experiences}
+                    skills={skills}
+                    className="cv-preview"
+                    ref={previewRef}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    color="success"
+                    onClick={handlePrint}
+                >
+                    Download PDF
+                </Button>
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={handleLoadExample}
+                    color="info"
+                >
+                    Load Example
+                </Button>
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={handleReset}
+                    color="error"
+                >
+                    Reset
+                </Button>
+            </Grid>
+        </Grid>
+    );
+};
 
 export default Main;
