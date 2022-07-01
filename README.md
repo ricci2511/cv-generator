@@ -4,8 +4,8 @@ Web App to build your own CV with dynamic rendering, meaning there is a preview
 section that is changing as you are building your resume. The final result can be 
 exported to a PDF file.
 
-My first ever React project and first time using Material UI. Built with class components
-to get familiar with them. Will probably soon rewrite the app to use React Hooks.
+My first ever React project and first time using Material UI. First version was built with class components
+to get familiar with them, but it has been rewritten to functional components using Hooks.
 
 [Live Demo](https://ricci2511.github.io/cv-generator/) :star2:
 
